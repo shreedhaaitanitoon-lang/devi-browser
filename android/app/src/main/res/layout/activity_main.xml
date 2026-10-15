@@ -18,8 +18,7 @@
             android:id="@+id/ivLock"
             android:layout_width="20dp"
             android:layout_height="20dp"
-            android:src="@android:ic_secure"
-            android:tint="#10B981"
+            android:src="@android:drawable/ic_lock_lock"
             android:contentDescription="Security Lock" />
 
         <EditText
