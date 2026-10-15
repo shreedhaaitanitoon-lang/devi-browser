@@ -1,4 +1,4 @@
-package in.devibrowser.android.security
+package com.devibrowser.app.security
 
 import android.content.Context
 import android.net.Uri

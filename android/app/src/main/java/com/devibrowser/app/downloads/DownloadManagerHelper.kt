@@ -1,4 +1,4 @@
-package in.devibrowser.android.downloads
+package com.devibrowser.app.downloads
 
 import android.app.DownloadManager
 import android.content.Context

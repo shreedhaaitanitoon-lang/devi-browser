@@ -1,4 +1,4 @@
-package in.devibrowser.android.tabs
+package com.devibrowser.app.tabs
 
 import android.content.Context
 import java.util.UUID

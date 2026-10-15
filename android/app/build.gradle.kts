@@ -4,11 +4,11 @@ plugins {
 }
 
 android {
-    namespace = "in.devibrowser.android"
+    namespace = "com.devibrowser.app"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "in.devibrowser.android"
+        applicationId = "com.devibrowser.app"
         minSdk = 24
         targetSdk = 34
         versionCode = 1

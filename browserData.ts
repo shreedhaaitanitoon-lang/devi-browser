@@ -224,9 +224,9 @@ export const TRANSLATIONS: Record<string, Record<string, string>> = {
 export const ANDROID_KOTLIN_FILES = [
   {
     name: 'MainActivity.kt',
-    path: 'android/app/src/main/java/in/devibrowser/android/MainActivity.kt',
+    path: 'android/app/src/main/java/com/devibrowser/app/MainActivity.kt',
     language: 'kotlin',
-    code: `package in.devibrowser.android
+    code: `package com.devibrowser.app
 
 import android.Manifest
 import android.content.pm.PackageManager
@@ -238,10 +238,10 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import in.devibrowser.android.databinding.ActivityMainBinding
-import in.devibrowser.android.privacy.AdTrackerBlocker
-import in.devibrowser.android.security.SecurityAuditor
-import in.devibrowser.android.tabs.TabManager
+import com.devibrowser.app.databinding.ActivityMainBinding
+import com.devibrowser.app.privacy.AdTrackerBlocker
+import com.devibrowser.app.security.SecurityAuditor
+import com.devibrowser.app.tabs.TabManager
 
 class MainActivity : AppCompatActivity() {
 
@@ -318,9 +318,9 @@ class MainActivity : AppCompatActivity() {
   },
   {
     name: 'TabManager.kt',
-    path: 'android/app/src/main/java/in/devibrowser/android/tabs/TabManager.kt',
+    path: 'android/app/src/main/java/com/devibrowser/app/tabs/TabManager.kt',
     language: 'kotlin',
-    code: `package in.devibrowser.android.tabs
+    code: `package com.devibrowser.app.tabs
 
 import android.content.Context
 import java.util.UUID
@@ -360,9 +360,9 @@ class TabManager(private val context: Context) {
   },
   {
     name: 'AdTrackerBlocker.kt',
-    path: 'android/app/src/main/java/in/devibrowser/android/privacy/AdTrackerBlocker.kt',
+    path: 'android/app/src/main/java/com/devibrowser/app/privacy/AdTrackerBlocker.kt',
     language: 'kotlin',
-    code: `package in.devibrowser.android.privacy
+    code: `package com.devibrowser.app.privacy
 
 import android.content.Context
 import android.net.Uri
@@ -402,9 +402,9 @@ class AdTrackerBlocker(private val context: Context) {
   },
   {
     name: 'SecurityAuditor.kt',
-    path: 'android/app/src/main/java/in/devibrowser/android/security/SecurityAuditor.kt',
+    path: 'android/app/src/main/java/com/devibrowser/app/security/SecurityAuditor.kt',
     language: 'kotlin',
-    code: `package in.devibrowser.android.security
+    code: `package com.devibrowser.app.security
 
 import android.content.Context
 import android.net.Uri
@@ -452,9 +452,9 @@ class SecurityAuditor(private val context: Context) {
   },
   {
     name: 'DownloadManagerHelper.kt',
-    path: 'android/app/src/main/java/in/devibrowser/android/downloads/DownloadManagerHelper.kt',
+    path: 'android/app/src/main/java/com/devibrowser/app/downloads/DownloadManagerHelper.kt',
     language: 'kotlin',
-    code: `package in.devibrowser.android.downloads
+    code: `package com.devibrowser.app.downloads
 
 import android.app.DownloadManager
 import android.content.Context

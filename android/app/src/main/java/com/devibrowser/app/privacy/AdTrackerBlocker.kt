@@ -1,4 +1,4 @@
-package in.devibrowser.android.privacy
+package com.devibrowser.app.privacy
 
 import android.content.Context
 import android.net.Uri

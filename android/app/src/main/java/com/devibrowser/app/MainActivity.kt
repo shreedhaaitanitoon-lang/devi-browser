@@ -1,4 +1,4 @@
-package in.devibrowser.android
+package com.devibrowser.app
 
 import android.Manifest
 import android.content.pm.PackageManager
@@ -10,10 +10,11 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import in.devibrowser.android.databinding.ActivityMainBinding
-import in.devibrowser.android.privacy.AdTrackerBlocker
-import in.devibrowser.android.security.SecurityAuditor
-import in.devibrowser.android.tabs.TabManager
+import com.devibrowser.app.databinding.ActivityMainBinding
+import com.devibrowser.app.privacy.AdTrackerBlocker
+import com.devibrowser.app.security.SecurityAuditor
+import com.devibrowser.app.security.SecurityReport
+import com.devibrowser.app.tabs.TabManager
 
 class MainActivity : AppCompatActivity() {
 
@@ -37,18 +38,19 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupWebViewEngine() {
-        val webSettings = binding.webView.settings
-        webSettings.javaScriptEnabled = true
-        webSettings.domStorageEnabled = true
-        webSettings.loadWithOverviewMode = true
-        webSettings.useWideViewPort = true
-        webSettings.cacheMode = WebSettings.LOAD_DEFAULT
+        binding.webView.settings.apply {
+            javaScriptEnabled = true
+            domStorageEnabled = true
+            loadWithOverviewMode = true
+            useWideViewPort = true
+            cacheMode = WebSettings.LOAD_DEFAULT
+        }
 
         binding.webView.webViewClient = object : WebViewClient() {
             override fun onPageFinished(view: WebView?, url: String?) {
                 super.onPageFinished(view, url)
-                url?.let {
-                    securityAuditor.auditUrl(it) { report ->
+                url?.let { pageUrl ->
+                    securityAuditor.auditUrl(pageUrl) { report: SecurityReport ->
                         updateSecurityBadge(report.isSecure)
                     }
                 }
@@ -61,7 +63,11 @@ class MainActivity : AppCompatActivity() {
         binding.btnSearch.setOnClickListener {
             val query = binding.etUrlBar.text.toString()
             if (query.isNotEmpty()) {
-                val formattedUrl = if (query.startsWith("http")) query else "https://www.google.co.in/search?q=$query"
+                val formattedUrl = if (query.startsWith("http://") || query.startsWith("https://")) {
+                    query
+                } else {
+                    "https://www.google.co.in/search?q=$query"
+                }
                 binding.webView.loadUrl(formattedUrl)
             }
         }
