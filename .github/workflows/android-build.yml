@@ -24,26 +24,106 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y gradle
 
-      - name: Prepare Android Project & Gradle Wrapper
+      - name: Self-Heal and Organize Android Project Structure
         run: |
-          echo "Checking repository structure..."
-          ls -la
+          echo "Organizing and verifying standard Android project layout..."
+          mkdir -p app/src/main/java/in/devibrowser/android
+          mkdir -p app/src/main/res/values
+          mkdir -p app/src/main/res/layout
+          mkdir -p app/src/main/res/drawable
+          mkdir -p app/src/main/res/mipmap-anydpi-v26
+
+          # Move files into app/ if they were uploaded flat to root
+          [ -d "src" ] && cp -r src/* app/src/main/ java/ 2>/dev/null || true
+          [ -f "AndroidManifest.xml" ] && cp AndroidManifest.xml app/src/main/
           
-          # If build.gradle.kts or settings.gradle.kts are missing in root, check if they are inside android/
-          if [ ! -f "build.gradle.kts" ] && [ -f "android/build.gradle.kts" ]; then
-            echo "Moving files from android/ to root..."
-            cp -r android/* .
+          # Write robust root settings.gradle.kts
+          cat << 'EOF' > settings.gradle.kts
+          pluginManagement {
+              repositories {
+                  google()
+                  mavenCentral()
+                  gradlePluginPortal()
+              }
+          }
+          dependencyResolutionManagement {
+              repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+              repositories {
+                  google()
+                  mavenCentral()
+              }
+          }
+          rootProject.name = "DeViBrowser"
+          include(":app")
+          EOF
+
+          # Write robust root build.gradle.kts
+          cat << 'EOF' > build.gradle.kts
+          plugins {
+              id("com.android.application") version "8.5.0" apply false
+              id("org.jetbrains.kotlin.android") version "1.9.24" apply false
+          }
+          EOF
+
+          # Write robust app/build.gradle.kts if missing
+          if [ ! -f "app/build.gradle.kts" ]; then
+            cat << 'EOF' > app/build.gradle.kts
+          plugins {
+              id("com.android.application")
+              id("org.jetbrains.kotlin.android")
+          }
+
+          android {
+              namespace = "in.devibrowser.android"
+              compileSdk = 34
+
+              defaultConfig {
+                  applicationId = "in.devibrowser.android"
+                  minSdk = 24
+                  targetSdk = 34
+                  versionCode = 1
+                  versionName = "3.2.0"
+                  testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+              }
+
+              buildTypes {
+                  release {
+                      isMinifyEnabled = false
+                      proguardFiles(
+                          getDefaultProguardFile("proguard-android-optimize.txt"),
+                          "proguard-rules.pro"
+                      )
+                  }
+              }
+              compileOptions {
+                  sourceCompatibility = JavaVersion.VERSION_17
+                  targetCompatibility = JavaVersion.VERSION_17
+              }
+              kotlinOptions {
+                  jvmTarget = "17"
+              }
+              buildFeatures {
+                  viewBinding = true
+              }
+          }
+
+          dependencies {
+              implementation("androidx.core:core-ktx:1.13.1")
+              implementation("androidx.appcompat:appcompat:1.7.0")
+              implementation("com.google.android.material:material:1.12.0")
+              implementation("androidx.constraintlayout:constraintlayout:2.1.4")
+              implementation("androidx.webkit:webkit:1.11.0")
+          }
+          EOF
           fi
-          
+
+          # Bootstrap Gradle Wrapper if missing
           mkdir -p gradle/wrapper
           if [ ! -f gradle/wrapper/gradle-wrapper.jar ]; then
             echo "Bootstrapping Gradle Wrapper JAR..."
             gradle wrapper --gradle-version 8.7
           fi
           chmod +x gradlew
-
-      - name: Verify Gradle Version
-        run: ./gradlew --version
 
       - name: Build Debug and Release APKs
         run: ./gradlew assembleDebug assembleRelease
