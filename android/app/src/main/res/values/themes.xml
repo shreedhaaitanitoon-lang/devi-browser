@@ -1,0 +1,5 @@
+<resources>
+    <style name="Theme.DeViBrowser" parent="Theme.Material3.DayNight.NoActionBar">
+        <item name="colorPrimary">@color/orange_500</item>
+    </style>
+</resources>
